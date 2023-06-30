@@ -1,0 +1,145 @@
+﻿<Window x:Class="PositionMonitoringClient.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PositionMonitoringClient"
+        mc:Ignorable="d"
+        Title="Position Monitoring System" Height="420" Width="1200"
+        Loaded="Window_Loaded"
+        x:Name="Window"
+        Background="Black"
+        BorderThickness="3"
+        BorderBrush="LightBlue">
+    <Window.DataContext>
+        <local:MainViewModel />
+    </Window.DataContext>
+    <Window.Resources>
+        <local:ValueToStateConverter x:Key="ValueToStateConverter" />
+        <local:ServerStateToValueConverter x:Key="ServerStateToValueConverter" />
+        <SolidColorBrush x:Key="DecreasingValueBrush" Color="LightPink" />
+        <SolidColorBrush x:Key="IncreasingValueBrush" Color="LightGreen" />
+        <SolidColorBrush x:Key="ServerStatusConnectedBrush" Color="Green" />
+        <SolidColorBrush x:Key="ServerStatusDisconnectedBrush" Color="Red" />
+        <SolidColorBrush x:Key="BuyBrush" Color="LightGreen" />
+        <SolidColorBrush x:Key="SellBrush" Color="LightPink" />
+        <Style x:Key="QtyChangeStyle" TargetType="DataGridCell" BasedOn="{StaticResource {x:Type DataGridCell}}">
+            <Setter Property="FontWeight" Value="Normal"></Setter>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Path=QtyChange, Converter={StaticResource ValueToStateConverter}}">
+                    <DataTrigger.Value>-1</DataTrigger.Value>
+                    <Setter Property="Background" Value="{StaticResource DecreasingValueBrush}"></Setter>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding QtyChange, Converter={StaticResource ValueToStateConverter}}">
+                    <DataTrigger.Value>1</DataTrigger.Value>
+                    <Setter Property="Background" Value="{StaticResource IncreasingValueBrush}"></Setter>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="ServerStatusStyle" TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+            <Setter Property="FontWeight" Value="Bold"></Setter>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsServerConnected}">
+                    <DataTrigger.Value>True</DataTrigger.Value>
+                    <Setter Property="Foreground" Value="{StaticResource ServerStatusConnectedBrush}"></Setter>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding IsServerConnected}">
+                    <DataTrigger.Value>False</DataTrigger.Value>
+                    <Setter Property="Foreground" Value="{StaticResource ServerStatusDisconnectedBrush}"></Setter>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="BuySellStyle" TargetType="DataGridCell" BasedOn="{StaticResource {x:Type DataGridCell}}">
+            <Setter Property="FontWeight" Value="Normal"></Setter>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Path=LatestTrade.BuySell}">
+                    <DataTrigger.Value>Buy</DataTrigger.Value>
+                    <Setter Property="Background" Value="{StaticResource BuyBrush}"></Setter>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding LatestTrade.BuySell}">
+                    <DataTrigger.Value>Sell</DataTrigger.Value>
+                    <Setter Property="Background" Value="{StaticResource SellBrush}"></Setter>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="DataGridColumnHeaderStyle" TargetType="{x:Type DataGridColumnHeader}">
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+        <Style x:Key="StatusBarStyle" TargetType="{x:Type TextBlock}">
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+        <Style TargetType="{x:Type DataGridCell}">
+            <Setter Property="FontWeight" Value="Normal"/>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="25"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <GroupBox Header="Positions" Grid.Row="0" Grid.Column="0" BorderBrush="LightBlue" Foreground="White" FontWeight="Bold">
+            <DataGrid x:Name="dataGridPositions" AutoGenerateColumns="False" ItemsSource="{Binding Positions}" CanUserAddRows="False" CanUserDeleteRows="False" CanUserSortColumns="True" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Position ID" Binding="{Binding Id}" SortDirection="Ascending" Width="Auto"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Ticker" Binding="{Binding Ticker}" Width="Auto"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Spot Price" Binding="{Binding Spot, StringFormat={}{0:n2}}" CanUserSort="False" Width="Auto"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Qty [T-1]" Binding="{Binding QtyT_1,StringFormat='{}{0:#,0}'}" Width="Auto"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Qty [T-0]" Binding="{Binding QtyT_0,StringFormat='{}{0:#,0}'}" Width="Auto"></DataGridTextColumn>
+                    <DataGridTextColumn  Binding="{Binding QtyChange,StringFormat='{}{0:#,0}'}"  Width="Auto" CellStyle="{StaticResource QtyChangeStyle}">
+                        <DataGridTextColumn.Header>
+                            <TextBlock Text="Qty Change">
+                                <TextBlock.ToolTip>
+                                    Qty Change = Qty[T-0] - Qty[T-1]
+                                </TextBlock.ToolTip>
+                            </TextBlock>
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="Cumulative Qty Traded" Binding="{Binding TotalCumulativeQtyTraded,StringFormat='{}{0:#,0}'}"  Width="*"></DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </GroupBox>
+        <GroupBox Header="Trades" Grid.Row="1" Grid.Column="0" BorderBrush="LightBlue" Foreground="White" FontWeight="Bold">
+            <DataGrid x:Name="dataGridTrades" AutoGenerateColumns="False" ItemsSource="{Binding Positions}" CanUserAddRows="False" CanUserDeleteRows="False" CanUserSortColumns="False" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Position ID" Binding="{Binding Id}" Width="Auto"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Trade ID" Binding="{Binding LatestTrade.TradeId}" Width="Auto"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Party ID" Binding="{Binding LatestTrade.PartyId}" Width="Auto"></DataGridTextColumn>
+                    <DataGridTextColumn Header="CptyParty ID" Binding="{Binding LatestTrade.CounterPartyId}" Width="Auto"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Ticker" Binding="{Binding LatestTrade.Ticker}" Width="Auto"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Buy/Sell" Binding="{Binding LatestTrade.BuySell}" Width="Auto" CellStyle="{StaticResource BuySellStyle}"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Price" Binding="{Binding LatestTrade.SpotPrice, StringFormat={}{0:n2}}" Width="Auto"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Qty" Binding="{Binding LatestTrade.Quantity,StringFormat='{}{0:#,0}'}" Width="Auto"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Notional USD" Binding="{Binding LatestTrade.NotionalUSD,StringFormat='{}{0:#,0}'}" Width="Auto"></DataGridTextColumn>
+                    <DataGridTextColumn Header="FXRate" Binding="{Binding LatestTrade.FXRate, StringFormat={}{0:n4}}" Width="Auto"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Trader ID" Binding="{Binding LatestTrade.TraderId}" Width="Auto"></DataGridTextColumn>
+                    <DataGridTextColumn Header="RiskBook" Binding="{Binding LatestTrade.RiskBook}" Width="Auto"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Trade Ccy" Binding="{Binding LatestTrade.TradeCcy}" Width="Auto"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Settl Ccy" Binding="{Binding LatestTrade.SettlementCcy}" Width="Auto"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Trade Date" Binding="{Binding LatestTrade.TradeDate,StringFormat='{}{0:dd-MMM-yyyy}'}" Width="Auto"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Settl Date" Binding="{Binding LatestTrade.SettlementDate,StringFormat='{}{0:dd-MMM-yyyy}'}" Width="Auto"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Mkt Desk" Binding="{Binding LatestTrade.MarketingDesk}" Width="Auto"></DataGridTextColumn>
+                    <DataGridTextColumn Header="LastUpdated" Binding="{Binding LatestTrade.LastUpdated}" Width="Auto"></DataGridTextColumn>
+                    <DataGridTextColumn Header="LastUpdateById" Binding="{Binding LatestTrade.LastUpdatedById}" Width="Auto"></DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </GroupBox>
+        <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="3,0,3,0">
+            <TextBlock FontWeight="Bold" xml:space="preserve" Style="{StaticResource StatusBarStyle}">Last Server Updates : </TextBlock>
+            <TextBlock Text="{Binding LastUpdatedTimeStamp, StringFormat='{}{0:hh:mm:ss tt}'}" Style="{StaticResource StatusBarStyle}"></TextBlock>
+            <TextBlock Text=" | " xml:space="preserve" Style="{StaticResource StatusBarStyle}"></TextBlock>
+            <TextBlock FontWeight="Bold" xml:space="preserve" Style="{StaticResource StatusBarStyle}">Server Status : </TextBlock>
+            <TextBlock Text="{Binding IsServerConnected, Converter={StaticResource ServerStateToValueConverter}}" Style="{StaticResource ServerStatusStyle}"></TextBlock>
+            <TextBlock Text=" | " xml:space="preserve" Style="{StaticResource StatusBarStyle}"></TextBlock>
+            <TextBlock FontWeight="Bold" xml:space="preserve" Style="{StaticResource StatusBarStyle}">Server address : </TextBlock>
+            <TextBlock Text="{Binding ServerAddress}" Style="{StaticResource StatusBarStyle}"></TextBlock>
+            <TextBlock Text=" | " xml:space="preserve" Style="{StaticResource StatusBarStyle}"></TextBlock>
+            <TextBlock FontWeight="Bold" xml:space="preserve" Style="{StaticResource StatusBarStyle}">User Id : </TextBlock>
+            <TextBlock Text="{Binding UserId}" Style="{StaticResource StatusBarStyle}"></TextBlock>
+        </StackPanel>
+    </Grid>
+</Window>

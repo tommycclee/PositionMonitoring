@@ -1,0 +1,58 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33213.308
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PositionMonitoringShared", "PositionMonitoringShared\PositionMonitoringShared.csproj", "{4497BFDA-5F03-4377-A82F-5ABFFE0B5544}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PositionMonitoringServer", "PositionMonitoringServer\PositionMonitoringServer.csproj", "{4D8C87DB-ED80-4319-92D4-D08E9333FB53}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PositionMonitoringClient", "PositionMonitoringClient\PositionMonitoringClient.csproj", "{FABC696A-9F0A-4312-9371-47997AB89538}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PositionMonitoringShared.Tests", "PositionMonitoringShared.Tests\PositionMonitoringShared.Tests.csproj", "{DF377658-3827-4209-A3AE-A1CFB916962E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PositionMonitoringServer.Tests", "PositionMonitoringServer.Tests\PositionMonitoringServer.Tests.csproj", "{94B02229-5F08-4165-BF2D-492ED8AEBECC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PositionMonitoringClient.Tests", "PositionMonitoringClient.Tests\PositionMonitoringClient.Tests.csproj", "{8188BB34-D3CF-484C-8886-866CEE9495F1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4497BFDA-5F03-4377-A82F-5ABFFE0B5544}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4497BFDA-5F03-4377-A82F-5ABFFE0B5544}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4497BFDA-5F03-4377-A82F-5ABFFE0B5544}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4497BFDA-5F03-4377-A82F-5ABFFE0B5544}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D8C87DB-ED80-4319-92D4-D08E9333FB53}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D8C87DB-ED80-4319-92D4-D08E9333FB53}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D8C87DB-ED80-4319-92D4-D08E9333FB53}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D8C87DB-ED80-4319-92D4-D08E9333FB53}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FABC696A-9F0A-4312-9371-47997AB89538}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FABC696A-9F0A-4312-9371-47997AB89538}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FABC696A-9F0A-4312-9371-47997AB89538}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FABC696A-9F0A-4312-9371-47997AB89538}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF377658-3827-4209-A3AE-A1CFB916962E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF377658-3827-4209-A3AE-A1CFB916962E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF377658-3827-4209-A3AE-A1CFB916962E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF377658-3827-4209-A3AE-A1CFB916962E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94B02229-5F08-4165-BF2D-492ED8AEBECC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94B02229-5F08-4165-BF2D-492ED8AEBECC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94B02229-5F08-4165-BF2D-492ED8AEBECC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94B02229-5F08-4165-BF2D-492ED8AEBECC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8188BB34-D3CF-484C-8886-866CEE9495F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8188BB34-D3CF-484C-8886-866CEE9495F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8188BB34-D3CF-484C-8886-866CEE9495F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8188BB34-D3CF-484C-8886-866CEE9495F1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E558890A-70B2-4D32-BDDA-EA5D2C31BED8}
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Greeter\Greeter.csproj
+	EndGlobalSection
+EndGlobal

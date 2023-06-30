@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+//import "google/protobuf/timestamp.proto";
+package TommyLee.example.grpc.PositionMonitoring;
+
+message PositionMonitoringMessage {
+    string from = 1;
+    string message = 2;
+}
+
+message PositionMonitoringMessageFromServer {
+    //google.protobuf.Timestamp timestamp = 1;
+    PositionMonitoringMessage message = 2;
+}
+
+service PositionMonitoringService {
+    rpc Connect(stream PositionMonitoringMessage) returns (stream PositionMonitoringMessageFromServer);
+}
